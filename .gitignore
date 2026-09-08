@@ -1,0 +1,12 @@
+node_modules/
+dist/
+dist-ssr/
+.env
+.env.local
+.env.*.local
+VAPID-KEYS-SECRET.txt
+*.log
+npm-debug.log*
+.DS_Store
+.vscode/*
+!.vscode/extensions.json

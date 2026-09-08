@@ -1,0 +1,396 @@
+/* Inter font — @import MUST be the first statement in the stylesheet */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import './tokens.css';
+
+/* ============================================================
+   IPHONE / DYNAMIC ISLAND / SAFE AREA — Master rules
+   ============================================================ */
+
+/* Force the app to extend behind status bar + Dynamic Island */
+:root {
+  --sat: env(safe-area-inset-top, 44px);
+  --sab: env(safe-area-inset-bottom, 34px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+}
+
+/* ============================================================
+   ACCESSIBILITY
+   ============================================================ */
+/* Visible keyboard focus (does not affect mouse/touch users) */
+:focus-visible {
+  outline: 2px solid #17B8D0;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+/* Respect users who reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* Root container fills entire screen including safe areas */
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  /* Extend bg behind Dynamic Island */
+  background: #0D1B2A;
+}
+
+/* Every panel wrapper */
+.panel-root {
+  max-width: 480px;
+  margin: 0 auto;
+  height: 100dvh;        /* dvh = dynamic viewport height, avoids iOS toolbar */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Bottom nav safe area */
+.bottom-nav {
+  padding-bottom: max(env(safe-area-inset-bottom, 16px), 16px);
+  flex-shrink: 0;
+}
+
+/* Page scroll area */
+.page-scroll {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* Page content padding */
+.page-content {
+  padding: 16px 16px;
+  padding-bottom: calc(80px + env(safe-area-inset-bottom, 16px));
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+  html { -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #0D1B2A;
+    color: #1A202C;
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior: none;
+  }
+  ::-webkit-scrollbar { display: none; }
+  * { scrollbar-width: none; }
+}
+
+@layer components {
+  .card { background: white; border-radius: 16px; box-shadow: 0 1px 2px rgba(13,27,42,.04), 0 6px 20px rgba(13,27,42,.05); }
+  .card-dark { background: #17294A; border-radius: 16px; }
+
+  .btn {
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px; border-radius: 12px; padding: 12px 16px;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    border: none; font-family: inherit; transition: opacity .15s;
+    width: 100%;
+  }
+  .btn:active { opacity: .85; }
+  .btn-teal  { background: #17B8D0; color: white; box-shadow: 0 6px 20px rgba(23,184,208,.3); }
+  .btn-navy  { background: #17294A; color: white; }
+  .btn-gold  { background: #C8A96E; color: white; box-shadow: 0 6px 20px rgba(200,169,110,.3); }
+  .btn-outline { background: white; color: #17B8D0; border: 1.5px solid #17B8D0; }
+  .btn-danger  { background: #FFF0F0; color: #E24B4A; border: 1px solid #E24B4A; }
+
+  .input {
+    width: 100%; border: 1.5px solid #E2E8F0; border-radius: 10px;
+    padding: 10px 12px; font-size: 16px; color: #1A202C;
+    background: #FAFBFC; font-family: inherit; outline: none;
+    transition: border-color .15s;
+  }
+  .input:focus { border-color: #17B8D0; }
+  .input-dark {
+    width: 100%; background: rgba(255,255,255,.08); border: 1.5px solid rgba(255,255,255,.12);
+    border-radius: 12px; padding: 14px 16px; font-size: 16px; color: white;
+    font-family: inherit; outline: none; transition: border-color .15s;
+  }
+  .input-dark:focus { border-color: #17B8D0; }
+  .input-dark::placeholder { color: rgba(255,255,255,.3); }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 20px;
+  }
+  .badge-success { background: #E6FAF0; color: #1D9E75; }
+  .badge-warning { background: #FFF3E0; color: #E67E22; }
+  .badge-danger  { background: #FFF0F0; color: #E24B4A; }
+  .badge-info    { background: #EBF8FF; color: #17B8D0; }
+  .badge-gold    { background: #FFF8EC; color: #C8A96E; }
+  .badge-purple  { background: #F5F0FF; color: #7F77DD; }
+  .badge-dark    { background: #E8EDF5; color: #17294A; }
+
+  .sheet-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.5);
+    z-index: 50; display: flex; align-items: flex-end;
+    animation: fadeIn .2s ease;
+  }
+  .sheet {
+    background: white; width: 100%; border-radius: 20px 20px 0 0;
+    padding: 20px 16px; max-height: 85vh; overflow-y: auto;
+    animation: slideUp .3s ease;
+  }
+  .sheet-handle { width: 36px; height: 4px; background: #E2E8F0; border-radius: 2px; margin: 0 auto 16px; }
+
+  .form-label { font-size: 11px; font-weight: 500; color: #718096; margin-bottom: 5px; display: block; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .sbtn {
+    background: #17B8D0; color: white; border: none; border-radius: 12px;
+    padding: 14px; width: 100%; font-size: 14px; font-weight: 600;
+    cursor: pointer; font-family: inherit; margin-top: 4px;
+  }
+  .sbtn-danger {
+    background: #E24B4A; color: white; border: none; border-radius: 12px;
+    padding: 14px; width: 100%; font-size: 14px; font-weight: 600;
+    cursor: pointer; font-family: inherit;
+  }
+}
+
+@keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes spin    { to { transform: rotate(360deg); } }
+
+/* PWA Safe Areas */
+
+/* ============================================================
+   POLISH: Page transitions, hover states, active feedback
+   ============================================================ */
+
+/* Smooth page entry */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes barGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.bar-grow { transform-origin: left center; animation: barGrow .8s cubic-bezier(.22, 1, .36, 1) both; }
+.page-content > * {
+  animation: fadeSlideUp .42s cubic-bezier(.22, 1, .36, 1) both;
+}
+.page-content > * + * { margin-top: 4px; }
+.page-content > *:nth-child(1) { animation-delay: .02s; }
+.page-content > *:nth-child(2) { animation-delay: .07s; }
+.page-content > *:nth-child(3) { animation-delay: .12s; }
+.page-content > *:nth-child(4) { animation-delay: .17s; }
+.page-content > *:nth-child(5) { animation-delay: .22s; }
+.page-content > *:nth-child(n+6) { animation-delay: .26s; }
+
+/* Card hover/tap feedback */
+button, a {
+  -webkit-tap-highlight-color: transparent;
+}
+button:active { opacity: 0.75; transform: scale(0.98); }
+
+/* Clickable cards */
+.card-tap {
+  transition: transform .15s, box-shadow .15s;
+  cursor: pointer;
+}
+.card-tap:hover  { box-shadow: 0 4px 20px rgba(0,0,0,.1); transform: translateY(-1px); }
+.card-tap:active { transform: scale(0.98); }
+
+/* Nav icon active glow */
+.nav-active i { filter: drop-shadow(0 0 6px rgba(200,169,110,.5)); }
+
+/* Admin dashboard card icons */
+.admin-card {
+  transition: transform .2s, box-shadow .2s;
+}
+.admin-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+}
+
+/* Smooth skeleton loader */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 8px;
+}
+
+/* Input focus glow */
+.input:focus {
+  border-color: #17B8D0 !important;
+  box-shadow: 0 0 0 3px rgba(23,184,208,.12);
+}
+
+/* Status bar area */
+
+/* ============================================================
+   shadcn/ui CSS Variables
+   ============================================================ */
+:root {
+  --background:   0 0% 100%;
+  --foreground:   222 47% 11%;
+  --card:         0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --primary:      199 80% 46%;   /* teal #17B8D0 */
+  --primary-foreground: 0 0% 100%;
+  --secondary:    40 47% 60%;    /* gold #C8A96E */
+  --secondary-foreground: 0 0% 100%;
+  --muted:        210 20% 96%;
+  --muted-foreground: 215 16% 47%;
+  --accent:       210 20% 96%;
+  --accent-foreground: 222 47% 11%;
+  --destructive:  0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border:       214 32% 91%;
+  --input:        214 32% 91%;
+  --ring:         199 80% 46%;
+  --radius:       0.75rem;
+}
+
+.dark {
+  --background:   222 47% 8%;     /* navy #0D1B2A */
+  --foreground:   210 20% 96%;
+  --card:         222 40% 13%;    /* navy light #17294A */
+  --card-foreground: 210 20% 96%;
+  --primary:      199 80% 46%;
+  --primary-foreground: 0 0% 100%;
+  --secondary:    40 47% 60%;
+  --secondary-foreground: 222 47% 11%;
+  --muted:        222 30% 18%;
+  --muted-foreground: 215 16% 65%;
+  --accent:       222 30% 18%;
+  --accent-foreground: 210 20% 96%;
+  --destructive:  0 72% 55%;
+  --destructive-foreground: 0 0% 100%;
+  --border:       222 25% 22%;
+  --input:        222 25% 22%;
+  --ring:         199 80% 46%;
+}
+
+/* ============================================================
+   Magic UI CSS Variables
+   ============================================================ */
+:root {
+  --color-1: 0 100% 63%;
+  --color-2: 270 100% 63%;
+  --color-3: 210 100% 63%;
+  --color-4: 195 100% 63%;
+  --color-5: 90 100% 63%;
+}
+
+@keyframes sada-spin { to { transform: rotate(360deg); } }
+
+/* iOS: any focusable field under 16px triggers Safari auto-zoom. Force 16px. */
+input, textarea, select { font-size: 16px; }
+
+
+/* ============================================================
+   POLISH LAYER  (appended — unlayered, so it refines the
+   component classes above without touching their structure)
+   Purely visual: no layout, spacing or size changes.
+   ============================================================ */
+
+/* Crisper text rendering */
+body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+/* Cards: softer, more layered shadow + a gentle lift when tappable */
+.card {
+  box-shadow: var(--shadow-md);
+  transition: box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.card:active { transform: scale(.995); }
+
+/* Buttons: real press feedback instead of a flat opacity change */
+.btn {
+  transition: transform var(--dur-fast) var(--ease),
+              box-shadow var(--dur) var(--ease),
+              opacity var(--dur-fast) var(--ease),
+              filter var(--dur-fast) var(--ease);
+  will-change: transform;
+}
+.btn:hover:not(:disabled)  { filter: brightness(1.04); }
+.btn:active:not(:disabled) { transform: translateY(1px) scale(.99); }
+.btn:disabled { opacity: .55; cursor: not-allowed; }
+
+/* Inputs: soft focus ring instead of a bare border colour change */
+.input, .input-dark {
+  transition: border-color var(--dur-fast) var(--ease),
+              box-shadow var(--dur-fast) var(--ease),
+              background-color var(--dur-fast) var(--ease);
+}
+.input:focus {
+  border-color: var(--brand-teal);
+  box-shadow: 0 0 0 3px rgba(23, 184, 208, .13);
+  background: var(--surface);
+}
+.input-dark:focus {
+  border-color: var(--brand-teal);
+  box-shadow: 0 0 0 3px rgba(23, 184, 208, .18);
+}
+.input::placeholder { color: var(--text-faint); }
+
+/* Badges: hairline edge so they read as objects, not flat fills */
+.badge {
+  border: 0.5px solid rgba(13, 27, 42, .06);
+  letter-spacing: .01em;
+}
+
+/* Keyboard focus: visible everywhere, never on mouse clicks */
+:focus-visible {
+  outline: 2px solid var(--brand-teal);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+button:focus:not(:focus-visible) { outline: none; }
+
+/* Slimmer, less intrusive scrollbars */
+* { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
+*::-webkit-scrollbar { width: 6px; height: 6px; }
+*::-webkit-scrollbar-thumb {
+  background: var(--border-strong); border-radius: var(--radius-pill);
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--text-faint); }
+*::-webkit-scrollbar-track { background: transparent; }
+
+/* Images/avatars shouldn't flash a hard edge while loading */
+img { -webkit-user-drag: none; }
+
+/* Respect reduced-motion for everything added above */
+@media (prefers-reduced-motion: reduce) {
+  .card, .btn, .input, .input-dark { transition: none !important; }
+  .btn:active, .card:active { transform: none !important; }
+}
+
+
+/* ============================================================
+   ICON FONT LOADING — prevents the "broken icons" flash
+   ------------------------------------------------------------
+   Tabler icons live in the Private Use Area and the CJK-Compatibility
+   block. Until the webfont arrives the browser substitutes a fallback,
+   which renders those codepoints as empty boxes (tofu) or Chinese
+   characters — the "broken icons" people were reporting. It self-heals
+   the moment the font loads, which is why it looked intermittent.
+
+   Keep the glyph invisible (but occupying its space, so nothing shifts)
+   until document.fonts.ready fires and main.tsx adds .fonts-ready.
+   ============================================================ */
+.ti::before { visibility: hidden; }
+.fonts-ready .ti::before { visibility: visible; }
+/* Safety net: if the font somehow never resolves, show icons anyway
+   after 3s rather than leaving the UI blank. */
+@keyframes revealIcons { to { visibility: visible; } }
+.ti::before { animation: revealIcons 0s linear 3s forwards; }
